@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program; if not, see <https://www.gnu.org/licenses/>.
 #
-from CGRtools.files import MRVread, MRVwrite
+from CGRtools.files import MRVRead, MRVWrite
 from io import StringIO, BytesIO
 from os import close, getenv
 from pathlib import Path
@@ -77,7 +77,7 @@ class StandardizeChemAxon(BaseEstimator, CIMtoolsTransformerMixin):
 
     def __processor_m(self, structures):
         with StringIO() as f:
-            with MRVwrite(f) as w:
+            with MRVWrite(f) as w:
                 for s in structures:
                     w.write(s)
             tmp = f.getvalue().encode()
@@ -89,7 +89,7 @@ class StandardizeChemAxon(BaseEstimator, CIMtoolsTransformerMixin):
         if p.returncode != 0:
             raise ConfigurationError(p.stderr.decode())
 
-        with BytesIO(p.stdout) as f, MRVread(f) as r:
+        with BytesIO(p.stdout) as f, MRVRead(f) as r:
             res = r.read()
             for x in p.stderr.decode().split('\n'):
                 if x.startswith('SEVERE: Error at molecule No.'):
@@ -98,7 +98,7 @@ class StandardizeChemAxon(BaseEstimator, CIMtoolsTransformerMixin):
 
     def __processor_s(self, structure):
         with StringIO() as f:
-            with MRVwrite(f) as w:
+            with MRVWrite(f) as w:
                 w.write(structure)
             data = dict(structure=f.getvalue(), parameters='mrv',
                         filterChain=[dict(filter='standardizer',
@@ -115,7 +115,7 @@ class StandardizeChemAxon(BaseEstimator, CIMtoolsTransformerMixin):
         if not res:
             return [None]
 
-        with BytesIO(res['structure'].encode()) as f, MRVread(f) as r:
+        with BytesIO(res['structure'].encode()) as f, MRVRead(f) as r:
             return r.read()
 
     __config = None
