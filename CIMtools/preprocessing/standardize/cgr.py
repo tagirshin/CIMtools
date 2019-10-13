@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program; if not, see <https://www.gnu.org/licenses/>.
 #
-from CGRtools import CGRreactor
+# from CGRtools import CGRreactor
 from CGRtools.containers import MoleculeContainer
 from sklearn.base import BaseEstimator
 from ...base import CIMtoolsTransformerMixin
@@ -72,8 +72,9 @@ class StandardizeCGR(BaseEstimator, CIMtoolsTransformerMixin):
         return iter2array((self.__prepare(g) for g in super().transform(x)), allow_none=True)
 
     def __prepare(self, g):
-        if self.balance_groups:  # DO NOT WORKING
-            g = clone_subgraphs(g)
+        if self.balance_groups:
+            pass # DO NOT WORKING
+            # g = clone_subgraphs(g)
 
         for fix in self.__fixes:
             while True:
